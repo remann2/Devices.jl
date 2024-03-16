@@ -215,15 +215,15 @@ end
 
 function gdswrite(io::IO, x::UInt16, y::Number...)
     l = sizeof(y) + 2
-    l+2 > 0xFFFF && error("Too many bytes in record for GDS-II format.")    # 7fff?
-    write(io, hton(UInt16(l+2))) +
+    # l+2 > 0xFFFF && error("Too many bytes in record for GDS-II format.")    # 7fff?
+    write(io, hton(UInt32(l+2))) +
     write(io, hton(x), map(hton, y)...)
 end
 
 function gdswrite(io::IO, x::UInt16, y::AbstractArray{T,1}) where {T <: Real}
     l = sizeof(y) + 2
-    l+2 > 0xFFFF && error("Too many bytes in record for GDS-II format.")    # 7fff?
-    write(io, hton(UInt16(l+2))) +
+    # l+2 > 0xFFFF && error("Too many bytes in record for GDS-II format.")    # 7fff?
+    write(io, hton(UInt32(l+2))) +
     write(io, hton(x)) +
     write(io, map(hton, y))
 end
@@ -233,8 +233,8 @@ function gdswrite(io::IO, x::UInt16, y::String)
     z = y
     mod(length(z),2) == 1 && (z*="\0")
     l = length(y) + 2
-    l+2 > 0xFFFF && error("Too many bytes in record for GDS-II format.")    # 7fff?
-    write(io, hton(UInt16(l+2))) +
+    # l+2 > 0xFFFF && error("Too many bytes in record for GDS-II format.")    # 7fff?
+    write(io, hton(UInt32(l+2))) +
     write(io, hton(x), z)
 end
 
